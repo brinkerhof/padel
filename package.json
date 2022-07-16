@@ -1,0 +1,22 @@
+{
+  "name": "real-padel-now",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cpf-cnpj-validator": "^1.0.3",
+    "express": "^4.18.1",
+    "express-async-errors": "^3.1.1",
+    "knex": "^2.1.0",
+    "sqlite3": "^5.0.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
