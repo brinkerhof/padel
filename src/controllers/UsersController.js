@@ -11,15 +11,27 @@ class UsersControllers {
   async create(req, res, next) {
     const { name, email, gender, password, birth_date, document, phone } =
       req.body;
+    9;
+    const emailVerifyIfExists = await knex("users").where({ email }).first();
 
-    if (!emailVerify(email)) {
-      return res.json(AppError({ message: "Invalid email" }));
-    }
-    if (!phoneVerify(phone)) {
-      return res.json(AppError({ message: "Invalid phone number" }));
+    const documentVerifyIfExists = await knex("users")
+      .where({ document })
+      .first();
+
+    if (!!emailVerifyIfExists) {
+      throw new AppError({ message: "Email already exists" });
     }
     if (!cpf.isValid(document) && !cnpj.isValid(document)) {
-      return res.json(AppError({ message: "Invalid phone number" }));
+      throw new AppError({ message: "Document is not valid" });
+    }
+    if (!!documentVerifyIfExists) {
+      throw new AppError({ message: "Document already exists" });
+    }
+    if (!emailVerify(email)) {
+      throw new AppError({ message: "Email is not valid" });
+    }
+    if (!phoneVerify(phone)) {
+      throw new AppError({ message: "Phone is not valid" });
     }
 
     await knex("users").insert({
