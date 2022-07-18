@@ -4,7 +4,6 @@ const { cpf, cnpj } = require("cpf-cnpj-validator");
 const AppError = require("../utils/AppError");
 const emailVerify = require("../utils/emailVerify");
 const phoneVerify = require("../utils/phoneVerify");
-const { request } = require("express");
 
 class UsersControllers {
   async index(req, res, next) {
@@ -16,11 +15,11 @@ class UsersControllers {
   async show(req, res, next) {
     const user_id = req.params.id;
 
-    if (!user_id) {
-      throw new AppError("Id do not exists", 404);
-    }
-
     const user = await knex("users").where({ id: user_id }).first();
+
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
 
     return res.json(user);
   }
@@ -111,12 +110,13 @@ class UsersControllers {
   async delete(req, res, next) {
     const user_id = req.params.id;
 
-    if (!user_id) {
-      throw new AppError("Id do not exists", 404);
+    const user = await knex("users").where({ id: user_id });
+
+    if (!user) {
+      throw new AppError("User not found", 404);
     }
 
-    await knex("users").where({ id: user_id }).del();
-
+    await user.del();
     return res.json("Success, user deleted");
   }
 }
