@@ -9,7 +9,11 @@ exports.up = (knex) =>
         )
       );
     table.string("title");
-    table.uuid("id_historic").references("id").inTable("historical");
+    table
+      .uuid("id_historic")
+      .references("id")
+      .inTable("historical")
+      .onDelete("CASCADE");
     table.datetime("tournament_start");
     table.datetime("tournament_end");
     table.integer("court_time");

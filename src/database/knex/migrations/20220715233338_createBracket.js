@@ -12,7 +12,8 @@ exports.up = (knex) =>
     table
       .uuid("id_tournament_category")
       .references("id")
-      .inTable("categories_tournaments");
+      .inTable("categories_tournaments")
+      .onDelete("CASCADE");
   });
 
 exports.down = (knex) => knex.schema.dropTable("brackets");

@@ -8,9 +8,21 @@ exports.up = (knex) =>
           "(lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))),2) || '-' || substr('89ab',abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))),2) || '-' || lower(hex(randomblob(6))))"
         )
       );
-    table.uuid("id_duo_one").references("id").inTable("duos");
-    table.uuid("id_duo_two").references("id").inTable("duos");
-    table.uuid("id_court").references("id").inTable("courts");
+    table
+      .uuid("id_duo_one")
+      .references("id")
+      .inTable("duos")
+      .onDelete("CASCADE");
+    table
+      .uuid("id_duo_two")
+      .references("id")
+      .inTable("duos")
+      .onDelete("CASCADE");
+    table
+      .uuid("id_court")
+      .references("id")
+      .inTable("courts")
+      .onDelete("CASCADE");
     table.datetime("match_start");
     table.integer("duo_one_points");
     table.integer("duo_two_points");

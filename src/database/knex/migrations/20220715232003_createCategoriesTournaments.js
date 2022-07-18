@@ -9,8 +9,16 @@ exports.up = (knex) =>
         )
       );
     table.string("gender");
-    table.uuid("id_category").references("id").inTable("categories");
-    table.uuid("id_tournament").references("id").inTable("tournaments");
+    table
+      .uuid("id_category")
+      .references("id")
+      .inTable("categories")
+      .onDelete("CASCADE");
+    table
+      .uuid("id_tournament")
+      .references("id")
+      .inTable("tournaments")
+      .onDelete("CASCADE");
   });
 
 exports.down = (knex) => knex.schema.dropTable("categories_tournaments");

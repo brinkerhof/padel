@@ -9,7 +9,11 @@ exports.up = (knex) =>
         )
       );
     table.string("name");
-    table.uuid("id_tournament").references("id").inTable("tournaments");
+    table
+      .uuid("id_tournament")
+      .references("id")
+      .inTable("tournaments")
+      .onDelete("CASCADE");
   });
 
 exports.down = (knex) => knex.schema.dropTable("courts");
