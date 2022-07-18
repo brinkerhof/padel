@@ -7,7 +7,9 @@ const phoneVerify = require("../utils/phoneVerify");
 
 class UsersControllers {
   async index(req, res, next) {}
+
   async show(req, res, next) {}
+
   async create(req, res, next) {
     const { name, email, gender, password, birth_date, document, phone } =
       req.body;
@@ -46,7 +48,11 @@ class UsersControllers {
 
     return res.json("Deu certo fé ");
   }
-  async update(req, res, next) {}
+
+  async update(req, res, next) {
+    return res.json(req.user.id);
+  }
+
   async delete(req, res, next) {}
 }
 
