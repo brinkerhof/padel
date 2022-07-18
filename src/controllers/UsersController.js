@@ -67,9 +67,9 @@ class UsersControllers {
     const { name, email, gender, birth_date, document, phone } = req.body;
     const user_id = req.user.id;
 
-    const userPassword = await knex("users")
+    const { password } = await knex("users")
       .where({ id: user_id })
-      .select({ password })
+      .select("password")
       .first();
 
     const emailVerifyIfExists = await knex("users").where({ email }).first();
@@ -94,17 +94,19 @@ class UsersControllers {
       throw new AppError({ message: "Phone is not valid" });
     }
 
-    const userUpdated = await knex("users").where({ id: user_id }).insert({
+    await knex("users").where({ id: user_id }).update({
       name,
       email,
       gender,
       birth_date,
       document,
       phone,
-      password: userPassword,
+      password,
     });
 
-    return res.json({ userUpdated });
+    const userUpdated = await knex("users").where({ id: user_id }).first();
+
+    return res.json(userUpdated);
   }
 
   async delete(req, res, next) {
@@ -116,7 +118,8 @@ class UsersControllers {
       throw new AppError("User not found", 404);
     }
 
-    await user.del();
+    await knex("users").where({ id: user_id }).del();
+
     return res.json("Success, user deleted");
   }
 }
