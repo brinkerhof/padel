@@ -1,5 +1,7 @@
 const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
+const genderVerify = require("../utils/genderVerify");
+const { cpf, cnpj } = require("cpf-cnpj-validator");
 
 class DuosController {
   async index(req, res, next) {
@@ -17,7 +19,40 @@ class DuosController {
 
     return res.json(duo);
   }
-  async create(req, res, next) {}
+  async create(req, res, next) {
+    const { document, gender, sum_ranking } = req.body;
+    const user_id = req.user.id;
+
+    const documentVerifyIfExists = await knex("users")
+      .where({ document })
+      .first();
+
+    if (!genderVerify(gender)) {
+      throw new AppError("Gender do not exists");
+    }
+
+    if (!cpf.isValid(document) && !cnpj.isValid(document)) {
+      throw new AppError({ message: "Document is not valid" });
+    }
+
+    if (!!!documentVerifyIfExists) {
+      throw new AppError({ message: "Document do not exists" });
+    }
+
+    const { id } = await knex("users")
+      .where({ document: document })
+      .select("id")
+      .first();
+
+    await knex("duos").insert({
+      gender,
+      sum_ranking,
+      id_player_one: user_id,
+      id_player_two: id,
+    });
+
+    return res.json("Deu certo fé");
+  }
   async update(req, res, next) {}
   async delete(req, res, next) {}
 }
