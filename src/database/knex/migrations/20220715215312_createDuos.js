@@ -18,6 +18,11 @@ exports.up = (knex) =>
       .references("id")
       .inTable("users")
       .onDelete("CASCADE");
+    table
+      .uuid("id_tournament")
+      .references("id")
+      .inTable("tournaments")
+      .onDelete("CASCADE");
     table.string("gender").notNullable();
     table.integer("sum_ranking").notNullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());

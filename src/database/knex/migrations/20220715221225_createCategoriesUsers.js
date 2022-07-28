@@ -14,11 +14,6 @@ exports.up = (knex) =>
       .references("id")
       .inTable("categories")
       .onDelete("CASCADE");
-    table
-      .uuid("id_tournament")
-      .references("id")
-      .inTable("tournaments")
-      .onDelete("CASCADE");
     table.integer("ranking");
   });
 

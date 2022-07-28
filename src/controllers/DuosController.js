@@ -54,7 +54,17 @@ class DuosController {
     return res.json("Deu certo fé");
   }
   async update(req, res, next) {}
-  async delete(req, res, next) {}
+  async delete(req, res, next) {
+    const duo_id = req.params.id;
+    const duo = await knex("duos").where({ id: duo_id }).first();
+
+    if (!duo) {
+      throw new AppError("Duo do not exists");
+    }
+    await knex("duos").where({ id: duo_id }).del();
+
+    return res.json("Success, duo deleted");
+  }
 }
 
 module.exports = DuosController;

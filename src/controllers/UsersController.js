@@ -9,7 +9,7 @@ class UsersControllers {
   async index(req, res, next) {
     const users = await knex("users");
 
-    return res.json({ users });
+    return res.json(users);
   }
 
   async show(req, res, next) {
@@ -27,12 +27,14 @@ class UsersControllers {
   async create(req, res, next) {
     const { name, email, gender, password, birth_date, document, phone } =
       req.body;
-    9;
+
     const emailVerifyIfExists = await knex("users").where({ email }).first();
 
     const documentVerifyIfExists = await knex("users")
       .where({ document })
       .first();
+
+    const allCategories = await knex("categories");
 
     if (!!emailVerifyIfExists) {
       throw new AppError({ message: "Email already exists" });
@@ -49,7 +51,6 @@ class UsersControllers {
     if (!phoneVerify(phone)) {
       throw new AppError({ message: "Phone is not valid" });
     }
-
     await knex("users").insert({
       name,
       email,
@@ -58,6 +59,16 @@ class UsersControllers {
       birth_date,
       document,
       phone,
+    });
+
+    const { id } = await knex("users").where({ email }).first()
+
+    allCategories.map(async ({ id: id_category }) => {
+      await knex("categories_users").insert({
+        id_user: id,
+        id_category,
+        ranking: 0,
+      });
     });
 
     return res.json("Deu certo fé ");
@@ -112,7 +123,7 @@ class UsersControllers {
   async delete(req, res, next) {
     const user_id = req.params.id;
 
-    const user = await knex("users").where({ id: user_id });
+    const user = await knex("users").where({ id: user_id }).first();
 
     if (!user) {
       throw new AppError("User not found", 404);
