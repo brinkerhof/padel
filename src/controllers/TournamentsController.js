@@ -32,9 +32,55 @@ class TournamentsController {
       duos_limit,
       duos_limit_infinite,
     } = req.body;
+
+    if (court_time_infinite) {
+      court_time = 0;
+    }
+    if (duos_limit_infinite) {
+      duos_limit = 0;
+    }
+
+    await knex("tournaments").insert({
+      title,
+      tournament_start,
+      tournament_end,
+      court_time,
+      court_time_infinite,
+      duos_limit,
+      duos_limit_infinite,
+    });
+    return res.json("Ta criado chefia");
   }
 
-  async update(req, res, next) {}
+  async update(req, res, next) {
+    const tournament_id = req.params.id;
+    const {
+      title,
+      tournament_start,
+      tournament_end,
+      court_time,
+      court_time_infinite,
+      duos_limit,
+      duos_limit_infinite,
+    } = req.body;
+
+    if (court_time_infinite) {
+      court_time = 0;
+    }
+    if (duos_limit_infinite) {
+      duos_limit = 0;
+    }
+
+    await knex("tournaments").where({ id: tournament_id }).update({
+      title,
+      tournament_start,
+      tournament_end,
+      court_time,
+      court_time_infinite,
+      duos_limit,
+      duos_limit_infinite,
+    });
+  }
 
   async delete(req, res, next) {
     const tournament_id = req.params.id;
