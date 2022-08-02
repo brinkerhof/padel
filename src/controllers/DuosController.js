@@ -20,12 +20,22 @@ class DuosController {
     return res.json(duo);
   }
   async create(req, res, next) {
-    const { document, gender, sum_ranking } = req.body;
+    const { document, gender, sum_ranking, tournament_id } = req.body;
     const user_id = req.user.id;
 
     const documentVerifyIfExists = await knex("users")
       .where({ document })
       .first();
+
+    const tournamentVerifyIfExists = await knex("tournaments")
+      .where({
+        id: tournament_id,
+      })
+      .first();
+
+    if (!!!tournamentVerifyIfExists) {
+      throw new AppError({ message: " Tournament do not exists" });
+    }
 
     if (!genderVerify(gender)) {
       throw new AppError("Gender do not exists");
@@ -49,6 +59,7 @@ class DuosController {
       sum_ranking,
       id_player_one: user_id,
       id_player_two: id,
+      id_tournmanet: tournament_id,
     });
 
     return res.json("Deu certo fé");
