@@ -61,7 +61,7 @@ class UsersControllers {
       phone,
     });
 
-    const { id } = await knex("users").where({ email }).first()
+    const { id } = await knex("users").where({ email }).first();
 
     allCategories.map(async ({ id: id_category }) => {
       await knex("categories_users").insert({

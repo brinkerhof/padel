@@ -40,6 +40,8 @@ class TournamentsController {
       duos_limit = 0;
     }
 
+    const allCategories = await knex("categories");
+
     await knex("tournaments").insert({
       title,
       tournament_start,
@@ -49,6 +51,17 @@ class TournamentsController {
       duos_limit,
       duos_limit_infinite,
     });
+
+    const { id } = await knex("tournaments").where({ title }).first();
+
+    allCategories.map(async ({ id: id_category, gender }) => {
+      await knex("categories_tournaments").insert({
+        id_tournament: id,
+        id_category,
+        gender,
+      });
+    });
+
     return res.json("Ta criado chefia");
   }
 

@@ -2,6 +2,7 @@ const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
 const genderVerify = require("../utils/genderVerify");
 const { cpf, cnpj } = require("cpf-cnpj-validator");
+const knexfile = require("../../knexfile");
 
 class DuosController {
   async index(req, res, next) {
@@ -20,7 +21,7 @@ class DuosController {
     return res.json(duo);
   }
   async create(req, res, next) {
-    const { document, gender, sum_ranking, tournament_id } = req.body;
+    const { document, gender, tournament_id } = req.body;
     const user_id = req.user.id;
 
     const documentVerifyIfExists = await knex("users")
@@ -49,10 +50,19 @@ class DuosController {
       throw new AppError({ message: "Document do not exists" });
     }
 
-    const { id } = await knex("users")
-      .where({ document: document })
-      .select("id")
+    const { id } = await knex("users").where({ document: document }).first();
+
+    const { ranking: ranking_two } = await knex("categories_users")
+      .where({
+        id_user: id,
+      })
       .first();
+
+    const { ranking: ranking_one } = await knex("categories_users")
+      .where({ id_user: user_id })
+      .first();
+
+    const sum_ranking = ranking_one + ranking_two;
 
     await knex("duos").insert({
       gender,

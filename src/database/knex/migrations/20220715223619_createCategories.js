@@ -9,6 +9,7 @@ exports.up = (knex) =>
         )
       );
     table.string("name");
+    table.string("gender");
   });
 
 exports.down = (knex) => knex.schema.dropTable("categories");
