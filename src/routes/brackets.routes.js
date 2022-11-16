@@ -1,11 +1,11 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-const BracketsController = require("../controllers/BracketsController");
+import BracketsController from "../controllers/BracketsController.js";
 
-const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
+import ensureAuthenticated from "../middlewares/ensureAuthenticated.js";
 
 const bracketsRoutes = Router();
 
 const bracketsController = new BracketsController();
 
-module.exports = bracketsRoutes;
+export default bracketsRoutes;

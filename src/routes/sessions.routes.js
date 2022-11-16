@@ -1,6 +1,6 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-const SessionsControllers = require("../controllers/SessionsController");
+import SessionsControllers from "../controllers/SessionsController.js";
 
 const sessionRoutes = Router();
 
@@ -8,4 +8,4 @@ const sessionsController = new SessionsControllers();
 
 sessionRoutes.post("/", sessionsController.create);
 
-module.exports = sessionRoutes;
+export default sessionRoutes;

@@ -1,8 +1,8 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-const UsersControllers = require("../controllers/UsersController");
+import UsersControllers from "../controllers/UsersController.js";
 
-const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
+import ensureAuthenticated from "../middlewares/ensureAuthenticated.js";
 
 const usersRoutes = Router();
 
@@ -14,4 +14,4 @@ usersRoutes.post("/", usersController.create);
 usersRoutes.put("/", ensureAuthenticated, usersController.update);
 usersRoutes.delete("/:id", ensureAuthenticated, usersController.delete);
 
-module.exports = usersRoutes;
+export default usersRoutes;

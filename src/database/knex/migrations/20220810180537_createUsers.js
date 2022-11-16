@@ -1,5 +1,5 @@
-exports.up = (knex) =>
-  knex.schema.createTable("users", (table) => {
+export function up(knex) {
+  return knex.schema.createTable("users", (table) => {
     table
       .uuid("id")
       .primary()
@@ -15,8 +15,12 @@ exports.up = (knex) =>
     table.date("birth_date").notNullable();
     table.string("document").unique().notNullable();
     table.string("phone");
+    table.boolean("isAdmin").notNullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
     table.timestamp("updated_at").defaultTo(knex.fn.now());
   });
+}
 
-exports.down = (knex) => knex.schema.dropTable("users");
+export function down(knex) {
+  return knex.schema.dropTable("users");
+}

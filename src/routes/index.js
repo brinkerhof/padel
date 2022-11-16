@@ -1,9 +1,9 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-const usersRoutes = require("./users.routes");
-const sessionsRoutes = require("./sessions.routes");
-const duosRoutes = require("./duos.routes");
-const bracketsRoutes = require("./brackets.routes");
+import usersRoutes from "./users.routes.js";
+import sessionsRoutes from "./sessions.routes.js";
+import duosRoutes from "./duos.routes.js";
+import bracketsRoutes from "./brackets.routes.js";
 
 const routes = Router();
 
@@ -12,4 +12,4 @@ routes.use("/sessions", sessionsRoutes);
 routes.use("/duos", duosRoutes);
 routes.use("/brackets", bracketsRoutes);
 
-module.exports = routes;
+export default routes;

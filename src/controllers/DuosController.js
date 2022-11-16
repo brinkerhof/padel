@@ -1,15 +1,14 @@
-const knex = require("../database/knex");
-const AppError = require("../utils/AppError");
-const genderVerify = require("../utils/genderVerify");
-const { cpf, cnpj } = require("cpf-cnpj-validator");
-const knexfile = require("../../knexfile");
+import knex from "../database/knex.js";
+import AppError from "../utils/AppError.js";
+import genderVerify from "../utils/genderVerify.js";
+import { cpf, cnpj } from "cpf-cnpj-validator.js";
 
 class DuosController {
-  async index(req, res, next) {
+  async index(req, res) {
     const duos = await knex("duos");
     res.json({ duos });
   }
-  async show(req, res, next) {
+  async show(req, res) {
     const duo_id = req.params.id;
 
     const duo = await knex("duos").where({ id: duo_id }).first();
@@ -20,7 +19,7 @@ class DuosController {
 
     return res.json(duo);
   }
-  async create(req, res, next) {
+  async create(req, res) {
     const { document, gender, tournament_id } = req.body;
     const user_id = req.user.id;
 
@@ -34,7 +33,7 @@ class DuosController {
       })
       .first();
 
-    if (!!!tournamentVerifyIfExists) {
+    if (!tournamentVerifyIfExists) {
       throw new AppError({ message: " Tournament do not exists" });
     }
 
@@ -46,7 +45,7 @@ class DuosController {
       throw new AppError({ message: "Document is not valid" });
     }
 
-    if (!!!documentVerifyIfExists) {
+    if (!documentVerifyIfExists) {
       throw new AppError({ message: "Document do not exists" });
     }
 
@@ -74,8 +73,8 @@ class DuosController {
 
     return res.json("Deu certo fé");
   }
-  async update(req, res, next) {}
-  async delete(req, res, next) {
+
+  async delete(req, res) {
     const duo_id = req.params.id;
     const duo = await knex("duos").where({ id: duo_id }).first();
 
@@ -88,4 +87,4 @@ class DuosController {
   }
 }
 
-module.exports = DuosController;
+export default DuosController;

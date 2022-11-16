@@ -1,6 +1,6 @@
-const knex = require("../database/knex");
+import knex from "../database/knex.js";
 
-const AppError = require("../utils/AppError");
+import AppError from "../utils/AppError.js";
 
 class BracketsController {
   async index(req, res, next) {}
@@ -10,7 +10,7 @@ class BracketsController {
   async delete(req, res, next) {}
 }
 
-module.exports = BracketsController;
+export default BracketsController;
 
 /**
  * Logica para criar brackets

@@ -1,8 +1,8 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-const DuosControllers = require("../controllers/DuosController");
+import DuosControllers from "../controllers/DuosController.js";
 
-const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
+import ensureAuthenticated from "../middlewares/ensureAuthenticated.js";
 
 const duosRoutes = Router();
 
@@ -11,7 +11,7 @@ const duosController = new DuosControllers();
 duosRoutes.get("/", ensureAuthenticated, duosController.index);
 duosRoutes.get("/:id", ensureAuthenticated, duosController.show);
 duosRoutes.post("/", ensureAuthenticated, duosController.create);
-duosRoutes.put("/ïd", ensureAuthenticated, duosController.update);
+//duosRoutes.put("/id", ensureAuthenticated, duosController.update);
 duosRoutes.delete("/", ensureAuthenticated, duosController.delete);
 
-module.exports = duosRoutes;
+export default duosRoutes;

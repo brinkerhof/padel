@@ -1,13 +1,17 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-const TournamentsController = require("../controllers/TournamentsController");
+import TournamentsController from "../controllers/TournamentsController.js";
 
-const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
+import ensureAuthenticated from "../middlewares/ensureAuthenticated.js";
 
 const tournamentsRoutes = Router();
 
 const tournamentsController = new TournamentsController();
 
-tournamentsRoutes("/", tournamentsController.create);
+tournamentsRoutes("/", tournamentsController.index);
+tournamentsRoutes("/:id", ensureAuthenticated, tournamentsController.show);
+tournamentsRoutes("/", ensureAuthenticated, tournamentsController.create);
+tournamentsRoutes("/:id", ensureAuthenticated, tournamentsController.update);
+tournamentsRoutes("/:id", ensureAuthenticated, tournamentsController.delete);
 
-module.exports = tournamentsRoutes;
+export default tournamentsRoutes;

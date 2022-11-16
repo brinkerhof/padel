@@ -1,19 +1,19 @@
-require("express-async-errors");
+import "express-async-errors";
 
-const express = require("express");
+import express, { json, urlencoded } from "express";
 
-const AppError = require("./utils/AppError");
+import AppError from "./utils/AppError.js";
 
-const routes = require("./routes");
+import routes from "./routes.js";
 
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(json());
+app.use(urlencoded({ extended: true }));
 
 app.use(routes);
 
-app.use((error, req, res, next) => {
+app.use((error, req, res) => {
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({
       status: "error",

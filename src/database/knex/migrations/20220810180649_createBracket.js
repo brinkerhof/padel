@@ -1,5 +1,5 @@
-exports.up = (knex) =>
-  knex.schema.createTable("brackets", (table) => {
+export function up(knex) {
+  return knex.schema.createTable("brackets", (table) => {
     table
       .uuid("id")
       .primary()
@@ -15,5 +15,8 @@ exports.up = (knex) =>
       .inTable("categories_tournaments")
       .onDelete("CASCADE");
   });
+}
 
-exports.down = (knex) => knex.schema.dropTable("brackets");
+export function down(knex) {
+  return knex.schema.dropTable("brackets");
+}

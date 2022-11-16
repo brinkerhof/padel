@@ -1,18 +1,18 @@
-const knex = require("../database/knex");
+import knex from "../database/knex.js";
 
-const { cpf, cnpj } = require("cpf-cnpj-validator");
-const AppError = require("../utils/AppError");
-const emailVerify = require("../utils/emailVerify");
-const phoneVerify = require("../utils/phoneVerify");
+import { cpf, cnpj } from "cpf-cnpj-validator";
+import AppError from "../utils/AppError.js";
+import emailVerify from "../utils/emailVerify.js";
+import phoneVerify from "../utils/phoneVerify.js";
 
 class UsersControllers {
-  async index(req, res, next) {
+  async index(req, res) {
     const users = await knex("users");
 
     return res.json(users);
   }
 
-  async show(req, res, next) {
+  async show(req, res) {
     const user_id = req.params.id;
 
     const user = await knex("users").where({ id: user_id }).first();
@@ -24,9 +24,17 @@ class UsersControllers {
     return res.json(user);
   }
 
-  async create(req, res, next) {
-    const { name, email, gender, password, birth_date, document, phone } =
-      req.body;
+  async create(req, res) {
+    const {
+      name,
+      email,
+      gender,
+      password,
+      birth_date,
+      document,
+      phone,
+      isAdmin,
+    } = req.body;
 
     const emailVerifyIfExists = await knex("users").where({ email }).first();
 
@@ -36,13 +44,13 @@ class UsersControllers {
 
     const allCategories = await knex("categories");
 
-    if (!!emailVerifyIfExists) {
+    if (emailVerifyIfExists) {
       throw new AppError({ message: "Email already exists" });
     }
     if (!cpf.isValid(document) && !cnpj.isValid(document)) {
       throw new AppError({ message: "Document is not valid" });
     }
-    if (!!documentVerifyIfExists) {
+    if (documentVerifyIfExists) {
       throw new AppError({ message: "Document already exists" });
     }
     if (!emailVerify(email)) {
@@ -59,6 +67,7 @@ class UsersControllers {
       birth_date,
       document,
       phone,
+      isAdmin,
     });
 
     const { id } = await knex("users").where({ email }).first();
@@ -74,7 +83,7 @@ class UsersControllers {
     return res.json("Deu certo fé ");
   }
 
-  async update(req, res, next) {
+  async update(req, res) {
     const { name, email, gender, birth_date, document, phone } = req.body;
     const user_id = req.user.id;
 
@@ -89,13 +98,13 @@ class UsersControllers {
       .where({ document })
       .first();
 
-    if (!!emailVerifyIfExists) {
+    if (emailVerifyIfExists) {
       throw new AppError({ message: "Email already exists" });
     }
     if (!cpf.isValid(document) && !cnpj.isValid(document)) {
       throw new AppError({ message: "Document is not valid" });
     }
-    if (!!documentVerifyIfExists) {
+    if (documentVerifyIfExists) {
       throw new AppError({ message: "Document already exists" });
     }
     if (!emailVerify(email)) {
@@ -120,7 +129,7 @@ class UsersControllers {
     return res.json(userUpdated);
   }
 
-  async delete(req, res, next) {
+  async delete(req, res) {
     const user_id = req.params.id;
 
     const user = await knex("users").where({ id: user_id }).first();
@@ -135,4 +144,4 @@ class UsersControllers {
   }
 }
 
-module.exports = UsersControllers;
+export default UsersControllers;

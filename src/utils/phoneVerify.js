@@ -1,4 +1,4 @@
-module.exports = phoneVerify = (phone) => {
+export default function phoneVerify(phone) {
   if (!/^[0-9]+$/.test(phone)) {
     return false;
   } else if (phone.length < 10 || phone.length > 11) {
@@ -6,4 +6,4 @@ module.exports = phoneVerify = (phone) => {
   } else {
     return true;
   }
-};
+}

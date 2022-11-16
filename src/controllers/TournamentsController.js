@@ -1,14 +1,14 @@
-const knex = require("../database/knex");
+import knex from "../database/knex.js";
 
-const AppError = require("../utils/AppError");
+import AppError from "../utils/AppError.js";
 
 class TournamentsController {
-  async index(req, res, next) {
+  async index(_req, res) {
     const tournaments = await knex("tournaments");
     return res.json(tournaments);
   }
 
-  async show(req, res, next) {
+  async show(req, res) {
     const tournament_id = req.params.id;
 
     const tournament = await knex("tournaments")
@@ -22,7 +22,7 @@ class TournamentsController {
     return res.json(tournament);
   }
 
-  async create(req, res, next) {
+  async create(req, res) {
     const {
       title,
       tournament_start,
@@ -31,12 +31,15 @@ class TournamentsController {
       court_time_infinite,
       duos_limit,
       duos_limit_infinite,
+      courts,
     } = req.body;
 
     if (court_time_infinite) {
+      // eslint-disable-next-line no-const-assign
       court_time = 0;
     }
     if (duos_limit_infinite) {
+      // eslint-disable-next-line no-const-assign
       duos_limit = 0;
     }
 
@@ -62,10 +65,14 @@ class TournamentsController {
       });
     });
 
+    courts.map(async (name) => {
+      await knex("courts").insert({ id_tournament: id, name: name });
+    });
+
     return res.json("Ta criado chefia");
   }
 
-  async update(req, res, next) {
+  async update(req, res) {
     const tournament_id = req.params.id;
     const {
       title,
@@ -78,9 +85,11 @@ class TournamentsController {
     } = req.body;
 
     if (court_time_infinite) {
+      // eslint-disable-next-line no-const-assign
       court_time = 0;
     }
     if (duos_limit_infinite) {
+      // eslint-disable-next-line no-const-assign
       duos_limit = 0;
     }
 
@@ -93,9 +102,10 @@ class TournamentsController {
       duos_limit,
       duos_limit_infinite,
     });
+    return res.json("Tournament updated_at");
   }
 
-  async delete(req, res, next) {
+  async delete(req, res) {
     const tournament_id = req.params.id;
 
     const tournament = await knex("tournaments")
@@ -112,4 +122,4 @@ class TournamentsController {
   }
 }
 
-module.exports = TournamentsController;
+export default TournamentsController;

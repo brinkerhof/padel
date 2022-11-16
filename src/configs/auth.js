@@ -1,6 +1,4 @@
-module.exports = {
-  jwt: {
-    secret: "default",
-    expiresIn: "1d",
-  },
+export const jwt = {
+  secret: "default",
+  expiresIn: "1d",
 };

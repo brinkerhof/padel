@@ -1,5 +1,5 @@
-exports.up = (knex) =>
-  knex.schema.createTable("categories_tournaments", (table) => {
+export function up(knex) {
+  return knex.schema.createTable("duos", (table) => {
     table
       .uuid("id")
       .primary()
@@ -8,17 +8,28 @@ exports.up = (knex) =>
           "(lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))),2) || '-' || substr('89ab',abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))),2) || '-' || lower(hex(randomblob(6))))"
         )
       );
-    table.string("gender");
     table
-      .uuid("id_category")
+      .uuid("id_player_one")
       .references("id")
-      .inTable("categories")
+      .inTable("users")
+      .onDelete("CASCADE");
+    table
+      .uuid("id_player_two")
+      .references("id")
+      .inTable("users")
       .onDelete("CASCADE");
     table
       .uuid("id_tournament")
       .references("id")
       .inTable("tournaments")
       .onDelete("CASCADE");
+    table.string("gender").notNullable();
+    table.integer("sum_ranking").notNullable();
+    table.timestamp("created_at").defaultTo(knex.fn.now());
+    table.timestamp("updated_at").defaultTo(knex.fn.now());
   });
+}
 
-exports.down = (knex) => knex.schema.dropTable("categories_tournaments");
+export function down(knex) {
+  return knex.schema.dropTable("duos");
+}

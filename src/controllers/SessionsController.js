@@ -1,10 +1,10 @@
-const knex = require("../database/knex");
-const AppError = require("../utils/AppError");
-const authConfig = require("../configs/auth");
-const { sign } = require("jsonwebtoken");
+import knex from "../database/knex.js";
+import AppError from "../utils/AppError.js";
+import { jwt } from "../configs/auth.js";
+import { sign } from "jsonwebtoken";
 
 class SessionsControllers {
-  async create(req, res, next) {
+  async create(req, res) {
     const { email, password } = req.body;
 
     const user = await knex("users").where({ email }).first();
@@ -18,7 +18,7 @@ class SessionsControllers {
       throw new AppError("Email or password is incorrect", 401);
     }
 
-    const { secret, expiresIn } = authConfig.jwt;
+    const { secret, expiresIn } = jwt;
     const token = sign({ user_id }, secret, {
       expiresIn,
     });
@@ -27,4 +27,4 @@ class SessionsControllers {
   }
 }
 
-module.exports = SessionsControllers;
+export default SessionsControllers;
