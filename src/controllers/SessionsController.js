@@ -1,7 +1,7 @@
-import knex from "../database/knex.js";
+import knex from "../database/knex/index.js";
 import AppError from "../utils/AppError.js";
 import { jwt } from "../configs/auth.js";
-import { sign } from "jsonwebtoken";
+import sign from "jsonwebtoken";
 
 class SessionsControllers {
   async create(req, res) {

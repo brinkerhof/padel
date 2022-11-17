@@ -1,4 +1,4 @@
-import knex from "../database/knex.js";
+import knex from "../database/knex/index.js";
 
 import AppError from "../utils/AppError.js";
 

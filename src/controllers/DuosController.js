@@ -1,7 +1,7 @@
-import knex from "../database/knex.js";
+import knex from "../database/knex/index.js";
 import AppError from "../utils/AppError.js";
 import genderVerify from "../utils/genderVerify.js";
-import { cpf, cnpj } from "cpf-cnpj-validator.js";
+import { cpf, cnpj } from "cpf-cnpj-validator";
 
 class DuosController {
   async index(req, res) {

@@ -4,7 +4,7 @@ import express, { json, urlencoded } from "express";
 
 import AppError from "./utils/AppError.js";
 
-import routes from "./routes.js";
+import routes from "./routes/index.js";
 
 const app = express();
 

@@ -1,4 +1,4 @@
-import knex from "../database/knex.js";
+import knex from "../database/knex/index.js";
 
 import { cpf, cnpj } from "cpf-cnpj-validator";
 import AppError from "../utils/AppError.js";

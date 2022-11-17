@@ -1,8 +1,8 @@
-const { verify } = require("jsonwebtoken");
-const AppError = require("../utils/AppError").default;
-const authConfig = require("../configs/auth");
+import verify from "jsonwebtoken";
+import AppError from "../utils/AppError.js";
+import { jwt } from "../configs/auth.js";
 
-function ensureAuthenticated(req, res, next) {
+function ensureAuthenticated(req, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -12,7 +12,7 @@ function ensureAuthenticated(req, res, next) {
   const [, token] = authHeader.split(" ");
 
   try {
-    const { user_id } = verify(token, authConfig.jwt.secret);
+    const { user_id } = verify(token, jwt.secret);
 
     req.user = {
       id: user_id,
@@ -24,4 +24,4 @@ function ensureAuthenticated(req, res, next) {
   }
 }
 
-module.exports = ensureAuthenticated;
+export default ensureAuthenticated;
